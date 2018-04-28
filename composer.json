@@ -1,7 +1,7 @@
 {
-    "name": "ast/mpay",
+    "name": "ast/mpay-module",
     "description": "",
-    "type": "asgard-module",
+    "type": "laravel-module",
     "license": "MIT", 
     "require": {
         "php": ">=7.0.0",
@@ -23,8 +23,8 @@
     "prefer-stable": true,
     "authors": [
         {
-            "name": "Nicolas Widart",
-            "email": "n.widart@gmail.com"
+            "name": "Miya Yeh",
+            "email": "miyaye3344@gmail.com"
         }
     ],
     "extra": {
