@@ -1,0 +1,43 @@
+{
+    "name": "ast/mpay",
+    "description": "",
+    "type": "asgard-module",
+    "license": "MIT", 
+    "require": {
+        "php": ">=7.0.0",
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0",
+        "orchestra/testbench": "3.5.*"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Mpay\\": ".",
+            "Modules\\": "Modules/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Mpay\\Providers\\MpayServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Mpay\\": ""
+        }
+    }
+}
