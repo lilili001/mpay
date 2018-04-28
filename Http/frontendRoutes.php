@@ -11,4 +11,9 @@ $router->group(['prefix' =>'/mpay'], function (Router $router) {
     $router->post('notify', [
         'uses' => 'PublicController@notify'
     ]);
+
+    $router->get('alipay',[
+       'uses' => 'PublicController@alipay'
+    ]);
+
 });
