@@ -25,8 +25,10 @@ class PublicController extends BasePublicController
 
     public function alipay()
     {
+
         $gateway = Omnipay::create('Alipay_AopPage');
         $gateway->sandbox();
+
         $gateway->setSignType('RSA2'); // RSA/RSA2/MD5
         $gateway->setAppId(env('ALIPAY_APP_ID'));
         $gateway->setPrivateKey(env('PRIVATE_KEY'));
@@ -45,6 +47,7 @@ class PublicController extends BasePublicController
         ])->send();
 
         $url = $response->getRedirectUrl();
+
         return redirect($url);
     }
 }

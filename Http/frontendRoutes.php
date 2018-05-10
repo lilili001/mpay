@@ -3,7 +3,9 @@
 use Illuminate\Routing\Router;
 /** @var Router $router */
 
-$router->group(['prefix' =>'/alipay'], function (Router $router) {
+
+$router->group(['prefix' =>'/mpay'], function (Router $router) {
+
 // append
     $router->get('return', [
         'uses' => 'PublicController@return'
@@ -60,3 +62,4 @@ Route::post('/webhook/paypal/{order?}/{env?}', [
     'as' => 'webhook.paypal.ipn',
     'uses' => 'PayPalController@webhook',
 ]);
+

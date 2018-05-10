@@ -52,6 +52,6 @@ class MpayServiceProvider extends ServiceProvider
 
     private function registerBindings()
     {
-        // add bindings
+
     }
 }
