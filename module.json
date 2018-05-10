@@ -1,0 +1,17 @@
+{
+    "name": "Mpay",
+    "alias": "mpay",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 1,
+    "providers": [
+        "Modules\\Mpay\\Providers\\MpayServiceProvider",
+        "Modules\\Mpay\\Providers\\RouteServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        
+    ],
+    "requires": []
+}
