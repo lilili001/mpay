@@ -11,7 +11,6 @@ namespace Modules\Mpay\Http\Controllers;
 use Modules\Core\Http\Controllers\BasePublicController;
 use Modules\Mpay\Entities\Order;
 use Modules\Product\Entities\ShoppingCart;
-use Omnipay\Omnipay;
 
 class OrderController extends BasePublicController
 {
@@ -31,9 +30,9 @@ class OrderController extends BasePublicController
     {
        $order =  Order::create([
             'order_id' => $this->StrOrderOne(),
-            'amount'   => $this->getSelectedAmount()
+            'amount'   => $this->getSelectedAmount(),
+            'user_id'   => user()->id
         ]);
-
-        return redirect()->route('app.home',['order'=> encrypt($order->order_id)]);
+        return redirect()->route('app.paypal.jump',['order'=> encrypt($order->order_id)]);
     }
 }

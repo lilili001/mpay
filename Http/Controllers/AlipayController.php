@@ -11,7 +11,7 @@ namespace Modules\Mpay\Http\Controllers;
 use Modules\Core\Http\Controllers\BasePublicController;
 use Omnipay\Omnipay;
 
-class PublicController extends BasePublicController
+class AlipayController extends BasePublicController
 {
     public function return()
     {
@@ -20,6 +20,8 @@ class PublicController extends BasePublicController
 
     public function notify()
     {
+        info('notify');
+        info( request('all') );
         return 'notify';
     }
 

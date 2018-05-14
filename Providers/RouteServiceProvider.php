@@ -11,7 +11,6 @@ class RouteServiceProvider extends CoreRoutingServiceProvider
      * @var string
      */
     protected $namespace = 'Modules\Mpay\Http\Controllers';
-
     /**
      * @return string
      */

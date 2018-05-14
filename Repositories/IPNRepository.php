@@ -30,6 +30,7 @@ class IPNRepository
      */
     public function handle($event, $verified, $order_id)
     {
+        info('ipn');
         $object = $event->getMessage();
 
         if (is_numeric($order_id)) {
@@ -45,7 +46,7 @@ class IPNRepository
         $paypal = PayPalIPN::create([
             'verified' => $verified,
             'transaction_id' => $object->get('txn_id'),
-            'order_id' => $order ? $order->id : null,
+            'order_id' => $order ? $order->order_id : null,
             'payment_status' => $object->get('payment_status'),
             'request_method' => $this->request->method(),
             'request_url' => $this->request->url(),
@@ -53,12 +54,9 @@ class IPNRepository
             'payload' => json_encode($this->request->all()),
         ]);
 
-        dd( $paypal ) ;
-
         if ($paypal->isVerified() && $paypal->isCompleted()) {
-            info('verified');
-            if ($order && $order->unpaid()) {
 
+            if ($order && $order->unpaid()) {
                 $order->update([
                     'payment_status' => $order::COMPLETED,
                 ]);

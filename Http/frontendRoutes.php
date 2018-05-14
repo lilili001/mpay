@@ -8,14 +8,14 @@ $router->group(['prefix' =>'/mpay'], function (Router $router) {
 
 // append
     $router->get('return', [
-        'uses' => 'PublicController@return'
+        'uses' => 'AlipayController@return'
     ]);
     $router->post('notify', [
-        'uses' => 'PublicController@notify'
+        'uses' => 'AlipayController@notify'
     ]);
 
     $router->get('/',[
-       'uses' => 'PublicController@alipay'
+       'uses' => 'AlipayController@alipay'
     ]);
 });
 
@@ -33,33 +33,39 @@ $router->group(['prefix' =>'/order'], function (Router $router) {
     ]);
 });
 
-Route::get('/order/{order?}', [
+Route::get('/orderdetail/{order?}', [
     'name' => 'PayPal Express Checkout',
     'as' => 'app.home',
-    'uses' => 'PayPalController@form',
+    'uses' => 'PaypalController@form',
+]);
+
+Route::get('/orderdetail/jumping/{order?}', [
+    'name' => 'PayPal Express Checkout',
+    'as' => 'app.paypal.jump',
+    'uses' => 'PaypalController@formjump',
 ]);
 
 $router->post('/checkout/payment/{order}/paypal', [
     'name' => 'PayPal Express Checkout',
     'as' => 'checkout.payment.paypal',
-    'uses' => 'PayPalController@checkout',
+    'uses' => 'PaypalController@checkout',
 ]);
 
 Route::get('/paypal/checkout/{order}/completed', [
     'name' => 'PayPal Express Checkout',
     'as' => 'paypal.checkout.completed',
-    'uses' => 'PayPalController@completed',
+    'uses' => 'PaypalController@completed',
 ]);
 
 Route::get('/paypal/checkout/{order}/cancelled', [
     'name' => 'PayPal Express Checkout',
     'as' => 'paypal.checkout.cancelled',
-    'uses' => 'PayPalController@cancelled',
+    'uses' => 'PaypalController@cancelled',
 ]);
 
 Route::post('/webhook/paypal/{order?}/{env?}', [
     'name' => 'PayPal Express IPN',
     'as' => 'webhook.paypal.ipn',
-    'uses' => 'PayPalController@webhook',
+    'uses' => 'PaypalController@webhook',
 ]);
 

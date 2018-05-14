@@ -9,6 +9,7 @@ use Modules\Mpay\Entities\PayPalIPN;
 use Modules\Mpay\PayPal;
 use Modules\Mpay\Repositories\IPNRepository;
 use PayPal\IPN\Event\IPNInvalid;
+use PayPal\IPN\Event\IPNVerificationFailure;
 use PayPal\IPN\Event\IPNVerified;
 use PayPal\IPN\Listener\Http\ArrayListener;
 
@@ -36,6 +37,12 @@ class PayPalController extends BasePublicController
         return view('mpay::form', compact('order'));
     }
 
+    public function formjump(Request $request, $order_id = null)
+    {
+        $order = Order::where([ 'order_id' => decrypt($order_id)] )->get()->first()  ;
+        return view('mpay::formjump',compact('order'));
+    }
+    
     /**
      * @param $order_id
      * @param Request $request
@@ -122,27 +129,20 @@ class PayPalController extends BasePublicController
     public function webhook($order_id, $env, Request $request)
     {
         $listener = new ArrayListener;
-
         if ($env == 'sandbox') {
             $listener->useSandbox();
         }
-
         $listener->setData($request->all());
-
         $listener = $listener->run();
-
         $listener->onInvalid(function (IPNInvalid $event) use ($order_id) {
             $this->repository->handle($event, PayPalIPN::IPN_INVALID, $order_id);
         });
-
         $listener->onVerified(function (IPNVerified $event) use ($order_id) {
             $this->repository->handle($event, PayPalIPN::IPN_VERIFIED, $order_id);
         });
-
         $listener->onVerificationFailure(function (IPNVerificationFailure $event) use ($order_id) {
             $this->repository->handle($event, PayPalIPN::IPN_FAILURE, $order_id);
         });
-
         $listener->listen();
     }
 }
