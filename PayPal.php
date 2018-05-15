@@ -50,6 +50,14 @@ class PayPal
         return $response;
     }
 
+    public function search($parameters)
+    {
+        $response = $this->gateway()
+            ->listPurchase($parameters)
+            ->send();
+
+        return $response;
+    }
     /**
      * @param $amount
      */

@@ -6,22 +6,26 @@ use Illuminate\Routing\Router;
 
 $router->group(['prefix' =>'/mpay'], function (Router $router) {
 
-// append
-    $router->get('return', [
-        'uses' => 'AlipayController@return'
-    ]);
-    $router->post('notify', [
-        'uses' => 'AlipayController@notify'
+    $router->get('/checkout/{order}',[
+        'uses' => 'AlipayController@checkout',
+        'as' => 'alipay.checkout'
     ]);
 
-    $router->get('/',[
-       'uses' => 'AlipayController@alipay'
+// append
+    $router->get('return', [
+        'uses' => 'AlipayController@return',
+        'as' => 'alipay.return'
+    ]);
+
+    $router->post('notify', [
+        'uses' => 'AlipayController@notify',
+        'as' => 'alipay.notify'
     ]);
 });
 
 $router->group(['prefix' =>'/order'], function (Router $router) {
 // append
-    $router->get('save', [
+    $router->get('save/{payment_method}', [
         'uses' => 'OrderController@save',
         'as' => 'order.create'
     ]);
@@ -32,6 +36,7 @@ $router->group(['prefix' =>'/order'], function (Router $router) {
         'uses' => 'OrderController@update'
     ]);
 });
+
 
 Route::get('/orderdetail/{order?}', [
     'name' => 'PayPal Express Checkout',
@@ -45,7 +50,7 @@ Route::get('/orderdetail/jumping/{order?}', [
     'uses' => 'PaypalController@formjump',
 ]);
 
-$router->post('/checkout/payment/{order}/paypal', [
+$router->get('/checkout/payment/{order}/paypal', [
     'name' => 'PayPal Express Checkout',
     'as' => 'checkout.payment.paypal',
     'uses' => 'PaypalController@checkout',
@@ -69,3 +74,8 @@ Route::post('/webhook/paypal/{order?}/{env?}', [
     'uses' => 'PaypalController@webhook',
 ]);
 
+Route::get('/transaction_search', [
+    'name' => 'PayPal Express transaction_search',
+    'as' => 'paypal.checkout.transaction_search',
+    'uses' => 'PaypalController@transaction_search',
+]);

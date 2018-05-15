@@ -26,13 +26,21 @@ class OrderController extends BasePublicController
             'instance' => 'cart'
         ])->first()->selected_total;
     }
-    public function save()
+    public function save($paymentMethod)
     {
        $order =  Order::create([
             'order_id' => $this->StrOrderOne(),
             'amount'   => $this->getSelectedAmount(),
+            //'payment_gateway' => $paymentMethod,
             'user_id'   => user()->id
         ]);
-        return redirect()->route('app.paypal.jump',['order'=> encrypt($order->order_id)]);
+
+       //根据payment_method 跳转不同的付款通道
+
+        if( $paymentMethod == 'alipay' ){
+            return redirect()->route('alipay.checkout',['order'=> encrypt($order->order_id) ] );
+        }else{
+            return redirect()->route('checkout.payment.paypal',['order'=> encrypt($order->order_id)]);
+        }
     }
 }

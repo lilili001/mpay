@@ -91,7 +91,6 @@ class PayPalController extends BasePublicController
         ]);
 
         if ($response->isSuccessful()) {
-
             $order->update([
                 'transaction_id' => $response->getTransactionReference()
             ]);

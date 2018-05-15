@@ -25,6 +25,15 @@ class CreateMpayPayPalIPNsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('alipay_ipn_records', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('order_id')->nullable();
+            $table->string('trade_no');
+            $table->text('payload')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**

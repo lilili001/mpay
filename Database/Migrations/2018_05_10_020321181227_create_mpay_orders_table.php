@@ -61,6 +61,7 @@ class CreateMpayOrdersTable extends Migration
         //订单操作记录表 待付款 已付款 等待发货 已发货 已签收 交易成功 交易关闭 退货 退款中 退款成功
         Schema::create('order_operation',function(Blueprint $table){
             $table->string('order_id');
+
             $table->string('order_status');
             $table->string('updated_at');
         });
