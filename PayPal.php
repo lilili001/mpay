@@ -64,18 +64,6 @@ class PayPal
             ->refund($parameters)
             ;
     }
-
-    public function capture($parameters)
-    {
-        return $this->gateway()
-            ->capture($parameters);
-    }
-
-    public function void($parameters)
-    {
-        return $this->gateway()
-            ->void($parameters);
-    }
     /**
      * @param $amount
      */
