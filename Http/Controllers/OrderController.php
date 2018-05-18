@@ -12,6 +12,8 @@ use Modules\Core\Http\Controllers\BasePublicController;
 use Modules\Mpay\Entities\Order;
 use Modules\Product\Entities\ShoppingCart;
 
+use Cart;
+
 class OrderController extends BasePublicController
 {
 
@@ -34,6 +36,23 @@ class OrderController extends BasePublicController
             //'payment_gateway' => $paymentMethod,
             'user_id'   => user()->id
         ]);
+
+        //清除购物车
+        $this->compareSessionVsDb();
+        foreach (Cart::instance('cart')->content() as $key => $item) {
+            if ($item->options['userId'] == user()->id  &&  !!($item->options['selected']) ) {
+                //删除
+                Cart::instance('cart')->remove($item->rawId);
+                //删除数据库购物车
+                ShoppingCart::where([
+                    'identifier' => user()->id,
+                    'instance'   => 'cart'
+                ])->update( [
+                    'content' => serialize( Cart::instance('cart')->content() ),
+                    'selected_total' => $this->getSelectedTotal()
+                ]);
+            }
+        }
 
        //根据payment_method 跳转不同的付款通道
 

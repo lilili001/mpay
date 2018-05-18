@@ -111,22 +111,7 @@ class PayPalController extends BasePublicController
                 'transaction_id' => $response->getTransactionReference()
             ]);
 
-            //清除购物车
-            $this->compareSessionVsDb();
-            foreach (Cart::instance('cart')->content() as $key => $item) {
-                if ($item->options['userId'] == user()->id  &&  !!($item->options['selected']) ) {
-                    //删除
-                    Cart::instance('cart')->remove($item->rawId);
-                    //删除数据库购物车
-                    ShoppingCart::where([
-                        'identifier' => user()->id,
-                        'instance'   => 'cart'
-                    ])->update( [
-                        'content' => serialize( Cart::instance('cart')->content() ),
-                        'selected_total' => $this->getSelectedTotal()
-                    ] );
-                }
-            }
+
 
             return redirect()->route('app.home', encrypt($order_id))->with([
                 'message' => 'You recent payment is sucessful with reference code ' . $response->getTransactionReference(),
