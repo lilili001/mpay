@@ -5,7 +5,7 @@ use Illuminate\Routing\Router;
 
 //Order routes
 $router->group(['prefix' =>'/order'], function (Router $router) {
-    $router->get('save/{payment_method}', [
+    $router->post('save', [
         'uses' => 'OrderController@save',
         'as' => 'order.create'
     ]);

@@ -12,7 +12,7 @@ class CreateMpayPayPalIPNsTable extends Migration
      */
     public function up()
     {
-        Schema::create('paypal_ipn_records', function (Blueprint $table) {
+        Schema::create('order_paypal_ipn_records', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->nullable();
             $table->string('verified');
@@ -20,13 +20,12 @@ class CreateMpayPayPalIPNsTable extends Migration
             $table->string('payment_status');
             $table->string('request_method')->nullable();
             $table->string('request_url')->nullable();
-            $table->longText('request_headers')->nullable();
             $table->longText('payload')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
 
-        Schema::create('alipay_ipn_records', function (Blueprint $table) {
+        Schema::create('order_alipay_ipn_records', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('order_id')->nullable();
             $table->string('trade_no');
@@ -43,6 +42,7 @@ class CreateMpayPayPalIPNsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mpay__paypalipns');
+        Schema::dropIfExists('order_paypal_ipn_records');
+        Schema::dropIfExists('order_alipay_ipn_records');
     }
 }

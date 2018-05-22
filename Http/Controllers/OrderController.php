@@ -8,14 +8,21 @@
 
 namespace Modules\Mpay\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Modules\Core\Http\Controllers\BasePublicController;
 use Modules\Mpay\Entities\Order;
+use Modules\Mpay\Repositories\OrderRepository;
 use Modules\Product\Entities\ShoppingCart;
 
 use Cart;
 
 class OrderController extends BasePublicController
 {
+    protected $order;
+    public function __construct(OrderRepository $order)
+    {
+        $this->order = $order;
+    }
 
     protected  function StrOrderOne(){
         /* 选择一个随机的方案 */
@@ -28,38 +35,17 @@ class OrderController extends BasePublicController
             'instance' => 'cart'
         ])->first()->selected_total;
     }
-    public function save($paymentMethod)
+    public function save(Request $request)
     {
-       $order =  Order::create([
-            'order_id' => $this->StrOrderOne(),
-            'amount'   => $this->getSelectedAmount(),
-            //'payment_gateway' => $paymentMethod,
-            'user_id'   => user()->id
-        ]);
 
-        //清除购物车
-        $this->compareSessionVsDb();
-        foreach (Cart::instance('cart')->content() as $key => $item) {
-            if ($item->options['userId'] == user()->id  &&  !!($item->options['selected']) ) {
-                //删除
-                Cart::instance('cart')->remove($item->rawId);
-                //删除数据库购物车
-                ShoppingCart::where([
-                    'identifier' => user()->id,
-                    'instance'   => 'cart'
-                ])->update( [
-                    'content' => serialize( Cart::instance('cart')->content() ),
-                    'selected_total' => $this->getSelectedTotal()
-                ]);
-            }
-        }
+         $this->order->save( $request->all() );
 
        //根据payment_method 跳转不同的付款通道
 
-        if( $paymentMethod == 'alipay' ){
-            return redirect()->route('alipay.checkout',['order'=> encrypt($order->order_id) ] );
-        }else{
-            return redirect()->route('checkout.payment.paypal',['order'=> encrypt($order->order_id)]);
-        }
+//        if( $paymentMethod == 'alipay' ){
+//            return redirect()->route('alipay.checkout',['order'=> encrypt($order->order_id) ] );
+//        }else{
+//            return redirect()->route('checkout.payment.paypal',['order'=> encrypt($order->order_id)]);
+//        }
     }
 }
