@@ -12,7 +12,7 @@
                 <p><strong>Order Overview !</strong></p>
                 <hr>
                 <p>Item : Yearly Subscription cost !</p>
-                <p>Amount : ${{ $order->amount }}</p>
+                <p>Amount :   {{ $order->currency . $order->amount_current_currency }}</p>
                 <hr>
             </div>
             <div class="gateway--paypal">

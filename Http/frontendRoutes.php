@@ -18,7 +18,7 @@ $router->group(['prefix' =>'/order'], function (Router $router) {
 });
 
 //alipay routes
-$router->group(['prefix' =>'/mpay'], function (Router $router) {
+$router->group(['prefix' =>'/alipay'], function (Router $router) {
     $router->get('/checkout/{order}',[
         'uses' => 'AlipayController@checkout',
         'as' => 'alipay.checkout'
@@ -38,17 +38,17 @@ Route::get('/orderdetail/{order?}', [
     'as' => 'app.home',
     'uses' => 'PaypalController@form',
 ]);
-Route::get('/paypal/checkout/payment/{order}', [
+Route::get('/paypal/checkout/{order}', [
     'name' => 'PayPal Express Checkout',
     'as' => 'checkout.payment.paypal',
     'uses' => 'PaypalController@checkout',
 ]);
-Route::get('/paypal/checkout/{order}/completed', [
+Route::get('/paypal/{order}/completed', [
     'name' => 'PayPal Express Checkout',
     'as' => 'paypal.checkout.completed',
     'uses' => 'PaypalController@completed',
 ]);
-Route::get('/paypal/checkout/{order}/cancelled', [
+Route::get('/paypal/{order}/cancelled', [
     'name' => 'PayPal Express Checkout',
     'as' => 'paypal.checkout.cancelled',
     'uses' => 'PaypalController@cancelled',

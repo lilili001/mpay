@@ -26,8 +26,8 @@ class Order extends Model
     /**
      * @var array
      */
-    //protected $guarded = [];
-    protected $fillable = ['transaction_id', 'order_id', 'amount', 'payment_status'];
+    protected $guarded = [];
+    //protected $fillable = ['transaction_id', 'order_id', 'amount', 'payment_status'];
 
     /**
      * @param Builder $query

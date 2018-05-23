@@ -11,6 +11,7 @@ namespace Modules\Mpay\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Modules\Core\Http\Controllers\BasePublicController;
+use Modules\Mpay\Entities\Order;
 use Omnipay\Omnipay;
 
 /**
@@ -51,6 +52,7 @@ class AlipayController extends BasePublicController
         /**
          * @var AopTradePagePayResponse $response
          */
+        $order = Order::where('order_id',$orderId)->get()->first();
         $response = $this->gateway->purchase()->setBizContent([
             'subject'      => 'test',
             'out_trade_no' => $orderId,
@@ -59,7 +61,6 @@ class AlipayController extends BasePublicController
         ])->send();
 
         $url = $response->getRedirectUrl();
-
         return redirect($url);
     }
 

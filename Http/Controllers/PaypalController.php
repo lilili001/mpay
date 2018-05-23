@@ -67,13 +67,11 @@ class PayPalController extends BasePublicController
     public function checkout($order_id, Request $request)
     {
         $order = Order::where([ 'order_id' => decrypt($order_id)] )->get()->first() ;
-
         $paypal = new PayPal;
-
         $response = $paypal->purchase([
-            'amount' => $paypal->formatAmount($order->amount),
+            'amount' => $paypal->formatAmount($order->amount_current_currency),
             'transactionId' => $order->order_id,
-            'currency' => 'USD',
+            'currency' => $order->currency,
             'cancelUrl' => $paypal->getCancelUrl($order),
             'returnUrl' => $paypal->getReturnUrl($order),
         ]);
@@ -98,29 +96,25 @@ class PayPalController extends BasePublicController
         $paypal = new PayPal;
 
         $response = $paypal->complete([
-            'amount' => $paypal->formatAmount($order->amount),
+            'amount' => $paypal->formatAmount($order->amount_current_currency),
             'transactionId' => $order->order_id,
-            'currency' => 'USD',
+            'currency' => $order->currency,
             'cancelUrl' => $paypal->getCancelUrl($order),
             'returnUrl' => $paypal->getReturnUrl($order),
             'notifyUrl' => $paypal->getNotifyUrl($order),
         ]);
 
         if ($response->isSuccessful()) {
-            $order->update([
+            Order::where('order_id',$order_id)->update([
                 'transaction_id' => $response->getTransactionReference()
             ]);
-
-
 
             return redirect()->route('app.home', encrypt($order_id))->with([
                 'message' => 'You recent payment is sucessful with reference code ' . $response->getTransactionReference(),
             ]);
         }
 
-        return redirect()->back()->with([
-            'message' => $response->getMessage(),
-        ]);
+        dd($response) ;
     }
     /**
      * @param $order_id

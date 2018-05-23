@@ -50,7 +50,7 @@ class IPNRepository
             'payment_status' => $object->get('payment_status'),
             'request_method' => $this->request->method(),
             'request_url' => $this->request->url(),
-            'request_headers' => json_encode($this->request->header()),
+            //'request_headers' => json_encode($this->request->header()),
             'payload' => json_encode($this->request->all()),
         ]);
 

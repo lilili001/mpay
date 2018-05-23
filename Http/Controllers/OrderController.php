@@ -15,7 +15,7 @@ use Modules\Mpay\Repositories\OrderRepository;
 use Modules\Product\Entities\ShoppingCart;
 
 use Cart;
-
+use AjaxResponse;
 class OrderController extends BasePublicController
 {
     protected $order;
@@ -24,22 +24,25 @@ class OrderController extends BasePublicController
         $this->order = $order;
     }
 
-    protected  function StrOrderOne(){
-        /* 选择一个随机的方案 */
-        mt_srand((double) microtime() * 1000000);
-        return date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT);
-    }
-    protected function getSelectedAmount(){
-        return ShoppingCart::where([
-            'identifier' => user()->id,
-            'instance' => 'cart'
-        ])->first()->selected_total;
-    }
     public function save(Request $request)
     {
+         $orderId = $this->order->save( $request->all() );
+         $paymentMethod = request('order_payment_method');
 
-         $this->order->save( $request->all() );
+         $url = null;
+         switch ($paymentMethod){
+             case 'alipay':
+                 $url = '/alipay/checkout/'.encrypt($orderId);
+                 break;
+             case 'paypal':
+                 $url = '/paypal/checkout/'.encrypt($orderId) ;
+         }
 
+         if( $orderId != false ){
+            return AjaxResponse::success('' , $url );
+         }else{
+             return AjaxResponse::fail('');
+         }
        //根据payment_method 跳转不同的付款通道
 
 //        if( $paymentMethod == 'alipay' ){
