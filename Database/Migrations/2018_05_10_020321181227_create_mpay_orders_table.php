@@ -33,6 +33,8 @@ class CreateMpayOrdersTable extends Migration
             $table->boolean('buyer_remark');//买家是否已评价
             $table->string('order_locale');
             $table->string('order_currency');
+            $table->boolean('is_paid'); //是否付款
+            $table->boolean('is_shipped'); //是否发货
             $table->timestamps();
             $table->softDeletes();
 
@@ -63,7 +65,8 @@ class CreateMpayOrdersTable extends Migration
 
         //订单产品信息表
         Schema::create('order_item',function(Blueprint $table){
-            $table->string('order_id')->unique();
+            $table->increments('id');
+            $table->string('order_id');
             $table->integer('item_id');
             $table->integer('quantity');
             $table->string('title');
@@ -74,7 +77,6 @@ class CreateMpayOrdersTable extends Migration
             $table->string('pic_path');
             $table->string('slug');
             $table->timestamps();
-            $table->primary('order_id');
         });
 
         //订单收货信息表

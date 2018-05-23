@@ -58,4 +58,21 @@ class Order extends Model
     {
         return in_array($this->payment_status, [self::PENDING]);
     }
+
+    public function address()
+    {
+        return $this->hasOne(OrderAddress::class ,'order_id' ,'order_id' );
+    }
+    public function delivery()
+    {
+        return $this->hasOne(OrderDelivery::class ,'order_id' ,'order_id' );
+    }
+    public function product()
+    {
+        return $this->hasMany(OrderProduct::class ,'order_id' ,'order_id' );
+    }
+    public function supplier()
+    {
+        return $this->hasOne(OrderSupplier::class ,'order_id' ,'order_id' );
+    }
 }
