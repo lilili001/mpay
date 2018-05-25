@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Modules\Mpay\Entities\PayPalIPN;
 use Modules\Mpay\PayPal;
 use Modules\Mpay\Repositories\IPNRepository;
+use Modules\Mpay\Repositories\OrderRepository;
 use Modules\Product\Entities\ShoppingCart;
 use PayPal\Api\Amount;
 use PayPal\Api\RefundRequest;
@@ -34,12 +35,12 @@ class PayPalController extends BasePublicController
      * @var ApiContext
      */
     protected $paypalApiContext;
-
+    protected $order;
     /**
      * PayPalController constructor.
      * @param IPNRepository $repository
      */
-    public function __construct(IPNRepository $repository)
+    public function __construct(IPNRepository $repository, OrderRepository $order)
     {
         $this->repository = $repository;
         $this->paypalApiContext = new ApiContext(
@@ -176,25 +177,7 @@ class PayPalController extends BasePublicController
      */
     public function refund($saleId)
     {
-        $params = request('all');
-        //refund amount
-        $amt = new Amount();
-        $amt->setCurrency($params['currency'])
-            ->setTotal($params['amount']);
-
-        //refund Object
-        $refundRequest = new RefundRequest();
-        $refundRequest->setAmount($amt);
-
-        //sale
-        $sale = new Sale();
-        $sale->setId($saleId);
-        try {
-            $refundedSale = $sale->refundSale($refundRequest, $this->paypalApiContext);
-        } catch (Exception $ex) {
-           return AjaxResponse::fail('',$ex->getMessage());
-        }
-        return $refundedSale;
+        return $this->order->refund($saleId);
     }
 
    /*************************************helper funcs**************************************************/

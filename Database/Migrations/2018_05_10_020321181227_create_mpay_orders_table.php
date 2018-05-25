@@ -33,8 +33,8 @@ class CreateMpayOrdersTable extends Migration
             $table->boolean('buyer_remark');//买家是否已评价
             $table->string('order_locale');
             $table->string('order_currency');
-            $table->boolean('is_paid'); //是否付款
-            $table->boolean('is_shipped'); //是否发货
+            $table->boolean('is_paid')->default(0); //是否付款
+            $table->boolean('is_shipped')->default(0); //是否发货
             $table->timestamps();
             $table->softDeletes();
 
@@ -43,7 +43,8 @@ class CreateMpayOrdersTable extends Migration
 
         //订单供应商信息表
         Schema::create('order_supplier',function(Blueprint $table){
-            $table->string('order_id')->unique();
+            $table->increments('id');
+            $table->string('order_id');
             $table->integer('item_id');
             $table->string('supplier');
             $table->string('supplier_item_id');
@@ -51,16 +52,16 @@ class CreateMpayOrdersTable extends Migration
             $table->decimal('supplier_unit_price');
             $table->decimal('supplier_subtotal');
             $table->timestamps();
-            $table->primary('order_id');
         });
 
         //发货单
         Schema::create('order_shipping',function(Blueprint $table){
-            $table->string('order_id')->unique();
+            $table->increments('id');
+            $table->string('order_id');
             $table->string('delivery');//发货方式
+            $table->string('tracking_number');//发货单号
             $table->string('invoice_number');//发货单号
             $table->timestamps();
-            $table->primary('order_id');
         });
 
         //订单产品信息表
@@ -74,6 +75,7 @@ class CreateMpayOrdersTable extends Migration
             $table->decimal('unit_price',18);
             $table->decimal('unit_price_current_currency',18);
             $table->decimal('subtotal');
+            $table->decimal('subtotal_current_currency',18);
             $table->string('pic_path');
             $table->string('slug');
             $table->timestamps();
@@ -81,7 +83,8 @@ class CreateMpayOrdersTable extends Migration
 
         //订单收货信息表
         Schema::create('order_address',function(Blueprint $table){
-            $table->string('order_id')->unique();
+            $table->increments('id');
+            $table->string('order_id');
             $table->string('name');
             $table->string('telephone');
             $table->string('mobile');
@@ -91,16 +94,15 @@ class CreateMpayOrdersTable extends Migration
             $table->string('street');
             $table->string('zipcode');
             $table->timestamps();
-            $table->primary('order_id');
         });
 
         //订单操作记录表 待付款 已付款 等待发货 已发货 已签收 交易成功 交易关闭 退货 退款中 退款成功
         Schema::create('order_operation',function(Blueprint $table){
-            $table->string('order_id')->unique();
+            $table->increments('id');
+            $table->string('order_id') ;
             $table->string('order_status');
             $table->string('order_status_label');
             $table->timestamps();
-            $table->primary('order_id');
         });
     }
 

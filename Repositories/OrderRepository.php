@@ -13,6 +13,9 @@ use Modules\Currency\Repositories\CurrencyRepository;
 use Modules\Mpay\Entities\Order;
 use Modules\Product\Repositories\ShoppingCartRepository;
 use Cart;
+use PayPal\Api\Amount;
+use PayPal\Api\RefundRequest;
+use PayPal\Api\Sale;
 
 /**
  * Class OrderRepository
@@ -63,6 +66,7 @@ class OrderRepository
                         'unit_price' => $product['price'],
                         'unit_price_current_currency' => $rateList[getCurrentCurrency()]['rate'] * $product['price'] ,
                         'subtotal' => $product['subtotal'],
+                        'subtotal_current_currency' => $rateList[getCurrentCurrency()]['rate'] * $product['subtotal'],
                         'title' => $product['name'],
                         'options' =>  json_encode( $product['options'] ),
                         'pic_path' => $product['options']['image'],
@@ -111,5 +115,28 @@ class OrderRepository
             info( 'Encounter en error for order placing ad below:'. $e->getMessage());
             return false;
         }
+    }
+
+    public function refund($saleId,$params)
+    {
+        //refund amount
+        $amt = new Amount();
+        $amt->setCurrency($params['currency'])
+            ->setTotal($params['amount']);
+
+        //refund Object
+        $refundRequest = new RefundRequest();
+        $refundRequest->setAmount($amt);
+
+        //sale
+        $sale = new Sale();
+        $sale->setId($saleId);
+        try {
+            $refundedSale = $sale->refundSale($refundRequest, $this->paypalApiContext);
+        } catch (Exception $ex) {
+            return false;
+            return AjaxResponse::fail('',$ex->getMessage());
+        }
+        return $refundedSale;
     }
 }

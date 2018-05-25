@@ -46,7 +46,7 @@ class Order extends Model
      */
     public function paid()
     {
-        return in_array($this->payment_status, [self::COMPLETED]);
+        return in_array($this->is_paid, [self::COMPLETED]);
     }
 
     /**
@@ -56,7 +56,7 @@ class Order extends Model
      */
     public function unpaid()
     {
-        return in_array($this->payment_status, [self::PENDING]);
+        return in_array($this->is_paid, [self::PENDING]);
     }
 
     public function address()
@@ -71,6 +71,17 @@ class Order extends Model
     {
         return $this->hasMany(OrderProduct::class ,'order_id' ,'order_id' );
     }
+
+    public function operation()
+    {
+        return $this->hasMany(OrderOperation::class,'order_id','order_id');
+    }
+
+    public function assginOperationTo($operation)
+    {
+        return $this->operation()->save($operation);
+    }
+
     public function supplier()
     {
         return $this->hasOne(OrderSupplier::class ,'order_id' ,'order_id' );
