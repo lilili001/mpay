@@ -8,6 +8,7 @@
 
 namespace Modules\Mpay\Repositories;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Modules\Mpay\Entities\Order;
 use Modules\Mpay\Entities\PayPalIPN;
@@ -59,6 +60,9 @@ class IPNRepository
             if ($order && $order->unpaid()) {
                 $order->update([
                     'payment_status' => $order::COMPLETED,
+                    'order_status' => 3,
+                    'is_paid' => 1,
+                    'payment_time' => Carbon::now()
                 ]);
 
                 // notify customer
@@ -66,7 +70,7 @@ class IPNRepository
                 // update database logic
             }
         }else{
-            info('faile');
+            info('fail');
         }
     }
 }

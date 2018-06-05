@@ -18,6 +18,7 @@ class CreateMpayOrdersTable extends Migration
             $table->string('order_id')->uniqid();
             $table->string('transaction_id')->nullable();
             $table->string('order_status',20);
+            $table->boolean('is_ordered_with_supplier')->default(0);//是否已和供应商订货
             $table->decimal('amount',18);
             $table->decimal('amount_current_currency',18);
             $table->string('currency');
@@ -28,6 +29,7 @@ class CreateMpayOrdersTable extends Migration
             $table->timestamp('payment_time')->default(null);
             $table->timestamp('consign_time')->default(null); //交易完成时间
             $table->timestamp('end_time')->default(null); //交易关闭成时间
+            $table->timestamp('order_with_supplier_at')->default(null);//和供应商订货时间
             $table->text('buyer_message');
             $table->string('buyer_name');
             $table->boolean('buyer_remark');//买家是否已评价

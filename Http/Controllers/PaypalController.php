@@ -107,7 +107,8 @@ class PayPalController extends BasePublicController
 
         if ($response->isSuccessful()) {
             Order::where('order_id',$order_id)->update([
-                'transaction_id' => $response->getTransactionReference()
+                'transaction_id' => $response->getTransactionReference(),
+                'order_status' => 3 //已付款
             ]);
 
             return redirect()->route('app.home', encrypt($order_id))->with([

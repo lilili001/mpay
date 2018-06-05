@@ -47,6 +47,7 @@ class OrderRepository
                 DB::table('orders')->insert([
                     'order_id' => $order_id,
                     'transaction_id' => '',
+                    'order_status' => 1, //待付款
                     'amount'   => $this->shopCart->getSelectedAmount(),
                     'amount_current_currency'  =>  $rateList[getCurrentCurrency()]['rate'] *  $this->shopCart->getSelectedAmount()  ,
                     'payment_gateway' => $data['order_payment_method'],
@@ -79,7 +80,6 @@ class OrderRepository
                 DB::table('order_item')->insert($pdcToInsert);
 
                 /****************** 更新订单 地址表 ****************************/
-
                 $address = $data['order_address'];
                 DB::table('order_address')->insert([
                     'order_id' => $order_id,
@@ -107,7 +107,7 @@ class OrderRepository
 
                 /****************** 购物车删除已下单产品 ****************************/
                 foreach( $productItems as $item ){
-                    //$this->shopCart->remove( $item['rowId'] );
+                    $this->shopCart->remove( $item['rowId'] );
                 }
             });
             return is_null($exception) ? $order_id : $exception;
@@ -135,7 +135,6 @@ class OrderRepository
             $refundedSale = $sale->refundSale($refundRequest, $this->paypalApiContext);
         } catch (Exception $ex) {
             return false;
-            return AjaxResponse::fail('',$ex->getMessage());
         }
         return $refundedSale;
     }

@@ -11,7 +11,30 @@
                 @endif
                 <p><strong>Order Overview !</strong></p>
                 <hr>
-                <p>Item : Yearly Subscription cost !</p>
+                <div>
+                    <h4>Items:</h4>
+                    @foreach( $order->product as $product )
+                        <div class="media">
+                              <div class="media-left">
+                                    <a href="#">
+                                      <img class="media-object" src="{{  $product->pic_path  }}" alt="...">
+                                    </a>
+                              </div>
+                              <div class="media-body">
+                                    <h4 class="media-heading">{{ $product->title }}</h4>
+                                    <div>
+                                        <?php
+                                            $options = json_decode( $product->options )
+                                        ?>
+                                        @foreach(  $options->selectedItemLocale as  $key=>$option )
+                                            <span>{{ $key .':'. $option  }}</span>
+                                            @endforeach
+                                    </div>
+                              </div>
+                        </div>
+                    @endforeach
+                </div>
+
                 <p>Amount :   {{ $order->currency . $order->amount_current_currency }}</p>
                 <hr>
             </div>
