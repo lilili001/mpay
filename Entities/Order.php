@@ -86,4 +86,11 @@ class Order extends Model
     {
         return $this->hasOne(OrderSupplier::class ,'order_id' ,'order_id' );
     }
+
+    //订单评论
+    public function comments()
+    {
+        return $this->morphMany(Comment::class,'commentable');
+    }
+
 }
