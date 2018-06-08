@@ -110,7 +110,7 @@ class CreateMpayOrdersTable extends Migration
         //订单退款记录表
         Schema::create('order_refund',function(Blueprint $table){
             $table->increments('id');
-            $table->string('order_id') ;
+            $table->string('order_id')->unique() ;
             $table->string('payerId');
             $table->string('is_order_shipped'); //是否已发货
             $table->string('is_order_received'); //是否已收到货
@@ -125,7 +125,7 @@ class CreateMpayOrdersTable extends Migration
         //订单退货记录表 买家填写退货物流后更新该表
         Schema::create('order_return',function(Blueprint $table){
             $table->increments('id');
-            $table->string('order_id');
+            $table->string('order_id')->unique();
             $table->integer('user_id');
             $table->string('name');
             $table->string('telephone');
@@ -144,6 +144,7 @@ class CreateMpayOrdersTable extends Migration
 
         Schema::create('order_return_items',function(Blueprint $table){
             $table->increments('id');
+            $table->integer('return_id');
             $table->string('order_id');
             $table->integer('item_id');
             $table->integer('quantity');
@@ -153,7 +154,9 @@ class CreateMpayOrdersTable extends Migration
         Schema::create('comments',function(Blueprint $table){
             $table->increments('id');
             $table->text('body'); // 评论或咨询或留言
+            $table->text('img_url');//留言的图片
             $table->integer('user_id');//用户id
+            $table->integer('pid');
             $table->integer('commentable_id');//对应模型id
             $table->string('commentable_type');//对应模型
             $table->timestamps();

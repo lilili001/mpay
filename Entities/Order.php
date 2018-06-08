@@ -93,4 +93,13 @@ class Order extends Model
         return $this->morphMany(Comment::class,'commentable');
     }
 
+    /**
+     * 获取这篇文章的评论以parent_id来分组
+     * @return static
+     */
+    public function getComments()
+    {
+        return $this->comments()->with('owner')->get()->groupBy('pid');
+    }
+
 }
