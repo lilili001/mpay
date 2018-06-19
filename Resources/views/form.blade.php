@@ -28,7 +28,7 @@
                                         ?>
                                         @foreach(  $options->selectedItemLocale as  $key=>$option )
                                             <span>{{ $key .':'. $option  }}</span>
-                                            @endforeach
+                                        @endforeach
                                     </div>
                               </div>
                         </div>

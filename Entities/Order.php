@@ -4,6 +4,8 @@ namespace Modules\Mpay\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Sale\Entities\Comment;
+use Modules\Sale\Entities\OrderRefund;
 
 class Order extends Model
 {
@@ -101,5 +103,4 @@ class Order extends Model
     {
         return $this->comments()->with('owner')->get()->groupBy('pid');
     }
-
 }

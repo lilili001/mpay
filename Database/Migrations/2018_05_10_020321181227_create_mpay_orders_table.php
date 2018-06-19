@@ -151,14 +151,44 @@ class CreateMpayOrdersTable extends Migration
             $table->text('options');
         });
 
+        //评论表
         Schema::create('comments',function(Blueprint $table){
             $table->increments('id');
             $table->text('body'); // 评论或咨询或留言
             $table->text('img_url');//留言的图片
             $table->integer('user_id');//用户id
-            $table->integer('pid');
+            $table->integer('pid')->default(0);
             $table->integer('commentable_id');//对应模型id
             $table->string('commentable_type');//对应模型
+            $table->boolean('is_show');//是否显示
+            $table->timestamps();
+        });
+
+        //商品评价表
+        Schema::create('product_comments',function(Blueprint $table){
+            $table->increments('id');
+            $table->string('order_id')->nullable();
+            $table->string('goods_id')->nullable();
+            $table->text('goods_options')->nullable();
+            $table->integer('user_id');
+            $table->float('goods_score')->nullable();
+            $table->integer('pId')->default(0);
+            $table->text('content');
+            $table->boolean('is_show');
+            $table->text('appraise_img_path')->nullable();
+            $table->integer('reply_count')->default(0);//用户回复
+            $table->integer('lev');//评论级别
+            $table->timestamps();
+        });
+
+        //商品回复评论表
+        Schema::create('product_comments_reply',function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('product_comment_id');
+            $table->boolean('is_show');
+            $table->integer('user_id');
+            $table->integer('to_user_id');
+            $table->text('content');
             $table->timestamps();
         });
     }
@@ -170,7 +200,7 @@ class CreateMpayOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders'); // 下单时创建
+        Schema::dropIfExists('orders'); //下单时创建
         Schema::dropIfExists('order_supplier'); //订单供应商
         Schema::dropIfExists('order_shipping'); //发货单
         Schema::dropIfExists('order_item'); //订单产品
@@ -180,5 +210,6 @@ class CreateMpayOrdersTable extends Migration
         Schema::dropIfExists('order_return');//退货记录表
         Schema::dropIfExists('order_return_items');//退货的产品
         Schema::dropIfExists('comments');//评论咨询或退款退货留言
+        Schema::dropIfExists('product_comments');//商品评论
     }
 }
