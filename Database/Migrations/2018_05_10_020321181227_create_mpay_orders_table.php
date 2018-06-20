@@ -39,7 +39,6 @@ class CreateMpayOrdersTable extends Migration
             $table->boolean('is_shipped')->default(0); //是否发货
             $table->timestamps();
             $table->softDeletes();
-
             $table->primary('order_id');
         });
 
@@ -110,8 +109,9 @@ class CreateMpayOrdersTable extends Migration
         //订单退款记录表
         Schema::create('order_refund',function(Blueprint $table){
             $table->increments('id');
-            $table->string('order_id')->unique() ;
+            $table->string('order_id');
             $table->string('payerId');
+            $table->integer('item_id');//产品id
             $table->string('is_order_shipped'); //是否已发货
             $table->string('is_order_received'); //是否已收到货
             $table->string('need_return_goods'); //是否退货
@@ -119,6 +119,8 @@ class CreateMpayOrdersTable extends Migration
             $table->string('approve_status')->default(0);//是否审批
             $table->string('refund_status');//退款状态 0 1
             $table->integer('user_id');
+            $table->string('currency');
+            $table->string('refund_no')->unique();//退款编号唯一
             $table->timestamps();
         });
 
@@ -127,14 +129,7 @@ class CreateMpayOrdersTable extends Migration
             $table->increments('id');
             $table->string('order_id')->unique();
             $table->integer('user_id');
-            $table->string('name');
-            $table->string('telephone');
-            $table->string('mobile');
-            $table->string('country');
-            $table->string('state');
-            $table->string('city');
-            $table->string('street');
-            $table->string('zipcode');
+            $table->text('address');
 
             $table->timestamp('pickup_time');//收货时间
             $table->string('approve_status')->default(0);

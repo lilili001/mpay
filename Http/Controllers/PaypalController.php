@@ -176,9 +176,9 @@ class PayPalController extends BasePublicController
     /**
      * refund
      */
-    public function refund($saleId)
+    public function refund($saleId,$params)
     {
-        return $this->order->refund($saleId);
+        return $this->order->refund($saleId,$params);
     }
 
    /*************************************helper funcs**************************************************/

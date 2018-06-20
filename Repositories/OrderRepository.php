@@ -16,6 +16,8 @@ use Cart;
 use PayPal\Api\Amount;
 use PayPal\Api\RefundRequest;
 use PayPal\Api\Sale;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 
 /**
  * Class OrderRepository
@@ -25,10 +27,17 @@ class OrderRepository
 {
     protected $shopCart;
     protected $currency;
+    protected $paypalApiContext;
     public function __construct( ShoppingCartRepository $shopCart , CurrencyRepository $currency )
     {
         $this->shopCart = $shopCart;
         $this->currency = $currency;
+        $this->paypalApiContext = new ApiContext(
+            new OAuthTokenCredential(
+                'ATP2EfifofYX1bFTKgFNOPbWky9sX74sr5REi_GOxjaY26J-ItcbqXa3AZmsm_SAtgmeMYOs9HnRDHml',
+                'EK_0M5hIQmW2gYQ7k8zIfpVsLqLYNz-Kqdz-XwX4g0rMxNFjDBWUGzWZHBvJmQTMli8bDJFYrgxVer-8'
+            )
+        );
     }
     /**
      *生成订单

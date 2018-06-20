@@ -103,4 +103,10 @@ class Order extends Model
     {
         return $this->comments()->with('owner')->get()->groupBy('pid');
     }
+
+    //一个订单可能有多比退款
+    public function refund()
+    {
+        return $this->hasMany(OrderRefund::class , 'order_id','order_id');
+    }
 }
