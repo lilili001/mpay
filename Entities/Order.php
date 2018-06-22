@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Sale\Entities\Comment;
 use Modules\Sale\Entities\OrderRefund;
+use Modules\Sale\Entities\OrderReturn;
 
 class Order extends Model
 {

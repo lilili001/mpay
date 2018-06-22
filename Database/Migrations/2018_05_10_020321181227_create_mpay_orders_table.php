@@ -62,6 +62,21 @@ class CreateMpayOrdersTable extends Migration
             $table->string('delivery');//发货方式
             $table->string('tracking_number');//追踪单号
             $table->string('invoice_number');//发货单号
+            $table->string('status');
+            $table->timestamps();
+        });
+
+        //物流跟踪
+        Schema::create('order_shipping_tracking',function(Blueprint $table){
+            $table->increments('id');
+            $table->string('order_id');
+            $table->string('tracking_number');
+            $table->string('carrier');
+            $table->string('status');
+            $table->string('original_country');
+            $table->string('destination_country');
+            $table->text('origin_info');
+            $table->text('destination_info');
             $table->timestamps();
         });
 

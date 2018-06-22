@@ -14,4 +14,9 @@ class OrderDelivery extends Model
 {
     protected $table = 'order_shipping';
     protected $guarded = [];
+
+    public function tracking()
+    {
+        return $this->hasOne(OrderDeliveryTracking::class,'tracking_number','tracking_number');
+    }
 }
