@@ -199,6 +199,9 @@ class CreateMpayOrdersTable extends Migration
             $table->integer('user_id');
             $table->integer('to_user_id');
             $table->text('content');
+            $table->timestamp('read_at');
+            $table->string('has_read',1)->default('F');
+            $table->string('dialog_id',10);
             $table->timestamps();
         });
     }
